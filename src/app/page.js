@@ -1,59 +1,135 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabaseClient.js";
+import { supabase } from "@/lib/supabaseClient";
+import AdminGuard from "@/components/AdminGuard";
+import StatCard from "@/components/StatCard";
+import { Users, Briefcase, Layers, Hammer } from "lucide-react";
+import Link from "next/link";
 
 export default function Home() {
-  const [categories, setCategories] = useState([]);
+  const [stats, setStats] = useState({
+    clients: 0,
+    providers: 0,
+    categories: 0,
+    services: 0,
+  });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchCategories();
+    fetchStats();
   }, []);
 
-  async function fetchCategories() {
-    setLoading(true);
-    // Conectando ao mesmo banco do seu app!
-    const { data, error } = await supabase
-      .from("service_categories")
-      .select("*")
-      .order("name");
+  async function fetchStats() {
+    try {
+      const { count: clientsCount } = await supabase
+        .from("profiles")
+        .select("*", { count: "exact", head: true })
+        .eq("user_role", "client");
+      const { count: providersCount } = await supabase
+        .from("profiles")
+        .select("*", { count: "exact", head: true })
+        .eq("user_role", "provider");
+      const { count: catCount } = await supabase
+        .from("service_categories")
+        .select("*", { count: "exact", head: true });
+      const { count: servCount } = await supabase
+        .from("services")
+        .select("*", { count: "exact", head: true });
 
-    if (error) console.error("Erro ao buscar:", error);
-    else setCategories(data || []);
-
-    setLoading(false);
+      setStats({
+        clients: clientsCount || 0,
+        providers: providersCount || 0,
+        categories: catCount || 0,
+        services: servCount || 0,
+      });
+    } catch (error) {
+      console.error("Erro ao buscar estatísticas:", error);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
-    <main className="min-h-screen p-8 bg-gray-50">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold mb-6 text-gray-800">
-          Dashboard Trampo
-        </h1>
+    <AdminGuard>
+      {/* Fundo adaptável */}
+      <main className="min-h-screen bg-gray-50 dark:bg-zinc-950 transition-colors duration-200">
+        {/* Navbar */}
+        <nav className="bg-white dark:bg-zinc-900 border-b border-gray-200 dark:border-zinc-800 px-8 py-4 flex justify-between items-center">
+          <h1 className="text-xl font-bold text-blue-600 dark:text-blue-500">
+            Trampo Admin
+          </h1>
+          <div className="flex gap-4">
+            <Link
+              href="/servicos"
+              className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
+            >
+              Gerenciar Catálogo
+            </Link>
+            <button
+              onClick={() => supabase.auth.signOut()}
+              className="text-red-600 dark:text-red-400 font-medium hover:text-red-800 dark:hover:text-red-300 transition-colors"
+            >
+              Sair
+            </button>
+          </div>
+        </nav>
 
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-xl font-semibold mb-4">Categorias Cadastradas</h2>
+        <div className="p-8 max-w-7xl mx-auto">
+          <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6">
+            Visão Geral
+          </h2>
 
-          {loading ? (
-            <p>Carregando...</p>
-          ) : (
-            <ul className="space-y-2">
-              {categories.map((category) => (
-                <li
-                  key={category.id}
-                  className="p-3 border border-gray-100 rounded hover:bg-gray-50 flex justify-between"
-                >
-                  <span>{category.name}</span>
-                  <span className="text-xs text-gray-400">
-                    ID: {category.id}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          )}
+          {/* Grid de Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <StatCard
+              title="Prestadores Ativos"
+              value={loading ? "..." : stats.providers}
+              icon={Hammer}
+              color="blue"
+              description="Profissionais cadastrados"
+            />
+            <StatCard
+              title="Contratantes"
+              value={loading ? "..." : stats.clients}
+              icon={Users}
+              color="purple"
+              description="Clientes buscando serviços"
+            />
+            <StatCard
+              title="Categorias"
+              value={loading ? "..." : stats.categories}
+              icon={Layers}
+              color="orange"
+            />
+            <StatCard
+              title="Serviços Oferecidos"
+              value={loading ? "..." : stats.services}
+              icon={Briefcase}
+              color="green"
+            />
+          </div>
+
+          {/* Área de Ação Rápida */}
+          <div className="bg-blue-600 dark:bg-blue-700 rounded-xl p-8 text-white flex justify-between items-center shadow-lg">
+            <div>
+              <h3 className="text-xl font-bold">
+                Precisa expandir o catálogo?
+              </h3>
+              <p className="text-blue-100 mt-1">
+                Adicione novas categorias e serviços para atrair mais
+                profissionais.
+              </p>
+            </div>
+            <Link
+              href="/servicos"
+              className="bg-white text-blue-600 px-6 py-3 rounded-lg font-bold hover:bg-blue-50 transition-colors"
+            >
+              Gerenciar Serviços
+            </Link>
+          </div>
         </div>
-      </div>
-    </main>
+      </main>
+    </AdminGuard>
   );
 }
