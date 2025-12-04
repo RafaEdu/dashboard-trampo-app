@@ -66,6 +66,13 @@ export default function Home() {
             >
               Gerenciar Catálogo
             </Link>
+            <Link
+              href="/verificacao"
+              className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors flex items-center gap-2"
+            >
+              Verificações
+              <span className="w-2 h-2 rounded-full bg-red-500"></span>
+            </Link>
             <button
               onClick={() => supabase.auth.signOut()}
               className="text-red-600 dark:text-red-400 font-medium hover:text-red-800 dark:hover:text-red-300 transition-colors"
