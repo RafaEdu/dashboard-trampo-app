@@ -91,25 +91,6 @@ export default function Home() {
               color="green"
             />
           </div>
-
-          {/* Área de Ação Rápida */}
-          <div className="bg-blue-600 dark:bg-blue-700 rounded-xl p-8 text-white flex flex-col md:flex-row justify-between items-center shadow-lg gap-4">
-            <div>
-              <h3 className="text-xl font-bold">
-                Precisa expandir o catálogo?
-              </h3>
-              <p className="text-blue-100 mt-1">
-                Adicione novas categorias e serviços para atrair mais
-                profissionais.
-              </p>
-            </div>
-            <Link
-              href="/servicos"
-              className="bg-white text-blue-600 px-6 py-3 rounded-lg font-bold hover:bg-blue-50 transition-colors whitespace-nowrap"
-            >
-              Gerenciar Serviços
-            </Link>
-          </div>
         </div>
       </DashboardLayout>
     </AdminGuard>
