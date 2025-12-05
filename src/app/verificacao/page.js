@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import AdminGuard from "@/components/AdminGuard";
 import VerificationModal from "@/components/VerificationModal";
+import DashboardLayout from "@/components/DashboardLayout";
 import Link from "next/link";
 import { ArrowLeft, UserCheck } from "lucide-react";
 
@@ -80,15 +81,9 @@ export default function VerificacaoPage() {
 
   return (
     <AdminGuard>
-      <main className="min-h-screen bg-gray-50 dark:bg-zinc-950 p-8">
-        {/* Header Simples */}
+      <DashboardLayout>
         <div className="max-w-7xl mx-auto mb-8 flex items-center gap-4">
-          <Link
-            href="/"
-            className="p-2 bg-white dark:bg-zinc-900 rounded-lg border border-gray-200 dark:border-zinc-800 hover:bg-gray-100 transition-colors"
-          >
-            <ArrowLeft size={20} className="text-gray-600 dark:text-gray-400" />
-          </Link>
+          {/* Header simplificado */}
           <div>
             <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
               Fila de Verificação
@@ -173,16 +168,16 @@ export default function VerificacaoPage() {
             </table>
           )}
         </div>
-      </main>
 
-      {/* Renderiza o Modal se houver item selecionado */}
-      {selectedRequest && (
-        <VerificationModal
-          document={selectedRequest}
-          onClose={() => setSelectedRequest(null)}
-          onResolve={handleResolve}
-        />
-      )}
+        {/* Renderiza o Modal se houver item selecionado */}
+        {selectedRequest && (
+          <VerificationModal
+            document={selectedRequest}
+            onClose={() => setSelectedRequest(null)}
+            onResolve={handleResolve}
+          />
+        )}
+      </DashboardLayout>
     </AdminGuard>
   );
 }

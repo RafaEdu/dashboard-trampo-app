@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import AdminGuard from "@/components/AdminGuard";
 import StatCard from "@/components/StatCard";
+import DashboardLayout from "@/components/DashboardLayout";
 import { Users, Briefcase, Layers, Hammer } from "lucide-react";
 import Link from "next/link";
 
@@ -52,37 +53,11 @@ export default function Home() {
 
   return (
     <AdminGuard>
-      {/* Fundo adaptável */}
-      <main className="min-h-screen bg-gray-50 dark:bg-zinc-950 transition-colors duration-200">
-        {/* Navbar */}
-        <nav className="bg-white dark:bg-zinc-900 border-b border-gray-200 dark:border-zinc-800 px-8 py-4 flex justify-between items-center">
-          <h1 className="text-xl font-bold text-blue-600 dark:text-blue-500">
-            Trampo Admin
-          </h1>
-          <div className="flex gap-4">
-            <Link
-              href="/servicos"
-              className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
-            >
-              Gerenciar Catálogo
-            </Link>
-            <Link
-              href="/verificacao"
-              className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors flex items-center gap-2"
-            >
-              Verificações
-              <span className="w-2 h-2 rounded-full bg-red-500"></span>
-            </Link>
-            <button
-              onClick={() => supabase.auth.signOut()}
-              className="text-red-600 dark:text-red-400 font-medium hover:text-red-800 dark:hover:text-red-300 transition-colors"
-            >
-              Sair
-            </button>
-          </div>
-        </nav>
+      {/* Envolva o conteúdo com DashboardLayout */}
+      <DashboardLayout>
+        {/* A Navbar antiga foi removida daqui. O Layout cuida disso agora. */}
 
-        <div className="p-8 max-w-7xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6">
             Visão Geral
           </h2>
@@ -118,7 +93,7 @@ export default function Home() {
           </div>
 
           {/* Área de Ação Rápida */}
-          <div className="bg-blue-600 dark:bg-blue-700 rounded-xl p-8 text-white flex justify-between items-center shadow-lg">
+          <div className="bg-blue-600 dark:bg-blue-700 rounded-xl p-8 text-white flex flex-col md:flex-row justify-between items-center shadow-lg gap-4">
             <div>
               <h3 className="text-xl font-bold">
                 Precisa expandir o catálogo?
@@ -130,13 +105,13 @@ export default function Home() {
             </div>
             <Link
               href="/servicos"
-              className="bg-white text-blue-600 px-6 py-3 rounded-lg font-bold hover:bg-blue-50 transition-colors"
+              className="bg-white text-blue-600 px-6 py-3 rounded-lg font-bold hover:bg-blue-50 transition-colors whitespace-nowrap"
             >
               Gerenciar Serviços
             </Link>
           </div>
         </div>
-      </main>
+      </DashboardLayout>
     </AdminGuard>
   );
 }
