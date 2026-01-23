@@ -28,3 +28,34 @@ export const getDashboardStats = async () => {
     throw error;
   }
 };
+
+// Busca histórico para o gráfico
+export const getHistoryStats = async (startDate, endDate) => {
+  const { data, error } = await supabase.rpc("get_registrations_history", {
+    start_date: startDate,
+    end_date: endDate,
+  });
+
+  if (error) throw error;
+  return data;
+};
+
+// Busca últimos usuários cadastrados
+export const getRecentUsers = async () => {
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("id, username, user_role, created_at")
+    .order("created_at", { ascending: false })
+    .limit(5);
+
+  if (error) throw error;
+  return data;
+};
+
+// Busca top serviços
+export const getTopServices = async () => {
+  const { data, error } = await supabase.rpc("get_top_services");
+
+  if (error) throw error;
+  return data;
+};
