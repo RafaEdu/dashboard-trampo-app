@@ -13,7 +13,7 @@ import {
   Settings,
   LogOut,
   Users,
-  Menu,
+  Map, // Novo ícone importado
 } from "lucide-react";
 
 export default function Sidebar({ isOpen, setIsOpen }) {
@@ -25,6 +25,11 @@ export default function Sidebar({ isOpen, setIsOpen }) {
       title: "Visão Geral",
       href: "/",
       icon: LayoutDashboard,
+    },
+    {
+      title: "Mapa de Prestadores",
+      href: "/mapa",
+      icon: Map,
     },
     {
       title: "Gerenciar Catálogo",
