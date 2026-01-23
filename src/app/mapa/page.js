@@ -1,14 +1,17 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import AdminGuard from "@/components/AdminGuard";
-import DashboardLayout from "@/components/DashboardLayout";
+import AdminGuard from "@/components/features/auth/AdminGuard";
+import DashboardLayout from "@/components/layout/DashboardLayout";
 
 // Importação dinâmica para evitar erro "window is not defined" no SSR
-const ProviderMap = dynamic(() => import("@/components/ProviderMap"), {
-  ssr: false,
-  loading: () => <p>Carregando mapa...</p>,
-});
+const ProviderMap = dynamic(
+  () => import("@/components/features/map/ProviderMap"),
+  {
+    ssr: false,
+    loading: () => <p>Carregando mapa...</p>,
+  },
+);
 
 export default function MapaPage() {
   return (

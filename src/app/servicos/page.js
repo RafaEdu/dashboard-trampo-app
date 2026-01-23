@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
-import AdminGuard from "@/components/AdminGuard";
-import DashboardLayout from "@/components/DashboardLayout";
+import AdminGuard from "@/components/features/auth/AdminGuard";
+import DashboardLayout from "@/components/layout/DashboardLayout";
 import Link from "next/link";
 import {
   Plus,

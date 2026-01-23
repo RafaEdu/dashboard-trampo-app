@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
-import AdminGuard from "@/components/AdminGuard";
-import VerificationModal from "@/components/VerificationModal";
-import DashboardLayout from "@/components/DashboardLayout";
+import AdminGuard from "@/components/features/auth/AdminGuard";
+import VerificationModal from "@/components/features/verification/VerificationModal";
+import DashboardLayout from "@/components/layout/DashboardLayout";
 import Link from "next/link";
 import { ArrowLeft, UserCheck } from "lucide-react";
 
@@ -27,7 +27,7 @@ export default function VerificacaoPage() {
           `
     *,
     profiles:provider_documents_profile_id_fkey_custom (full_name, cpf_cnpj, username)
-  `
+  `,
         )
         .eq("status", "pending")
         .order("created_at", { ascending: true });

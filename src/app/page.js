@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
-import AdminGuard from "@/components/AdminGuard";
-import StatCard from "@/components/StatCard";
-import DashboardLayout from "@/components/DashboardLayout";
+import AdminGuard from "@/components/features/auth/AdminGuard";
+import StatCard from "@/components/ui/StatCard";
+import DashboardLayout from "@/components/layout/DashboardLayout";
 import { Users, Briefcase, Layers, Hammer } from "lucide-react";
 import Link from "next/link";
 
