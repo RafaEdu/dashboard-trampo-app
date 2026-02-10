@@ -31,9 +31,14 @@ export const getDashboardStats = async () => {
 
 // Busca histórico para o gráfico
 export const getHistoryStats = async (startDate, endDate) => {
+  // Garante que o dia final seja inclusivo (até o final do dia)
+  const inclusiveEndDate = endDate.includes("T")
+    ? endDate
+    : `${endDate}T23:59:59`;
+
   const { data, error } = await supabase.rpc("get_registrations_history", {
     start_date: startDate,
-    end_date: endDate,
+    end_date: inclusiveEndDate,
   });
 
   if (error) throw error;
@@ -47,6 +52,19 @@ export const getRecentUsers = async () => {
     .select("id, username, user_role, created_at")
     .order("created_at", { ascending: false })
     .limit(5);
+
+  if (error) throw error;
+  return data;
+};
+
+// Busca últimos usuários cadastrados por role
+export const getRecentUsersByRole = async (role) => {
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("id, username, full_name, user_role, created_at")
+    .eq("user_role", role)
+    .order("created_at", { ascending: false })
+    .limit(20);
 
   if (error) throw error;
   return data;

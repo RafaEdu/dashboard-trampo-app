@@ -39,9 +39,7 @@ export default function Home() {
 
   // Filters
   const [dateRange, setDateRange] = useState({
-    start: new Date(new Date().setDate(new Date().getDate() - 30))
-      .toISOString()
-      .split("T")[0], // Últimos 30 dias
+    start: "2026-01-01",
     end: new Date().toISOString().split("T")[0],
   });
 
